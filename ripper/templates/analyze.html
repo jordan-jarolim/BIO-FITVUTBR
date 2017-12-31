@@ -1,0 +1,66 @@
+<html>
+
+<head>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <title>Rip counter</title>
+    <style>
+        body{
+            background-color:#AAA
+        }
+        h1 {
+            font-size: 2em;
+            font-weight: bold;
+            color: #000;
+            text-align: center;
+            font-family:sans-serif
+        }
+
+        a{
+            font-family: sans-serif;
+            color:#fff
+        }
+
+        h2 {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: red;
+            text-align: center;
+            font-family:sans-serif
+        }
+
+        table {
+            margin: auto;
+        }
+
+        #line {
+            stroke: rgb(255, 0, 0);
+            stroke-width: 2;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>
+        Analyzed between points: [{{x1}}, {{y1}}] - [{{x2}}, {{y2}}]
+    </h1>
+    <h2>
+       Ridge count: {{ridgeCount}}
+    </h2>
+    {% load static %}
+    <div style="width:100%;text-align:center">
+            <img style="border: solid 1px black" src="{% static 'upload/final.png' %}"/>   
+        </div>
+   <!-- <div style="width:100%;text-align:center;margin-top:10px;">
+        <img style="border: solid 1px black" height="200px" src="{% static name %}"/>    
+        <img style="border: solid 1px black" height="200px" src="{% static 'upload/contrasted.png' %}"/>
+        <img style="border: solid 1px black" height="200px" src="{% static 'upload/thresholded.png' %}"/>
+    </div>-->
+    <div style="width:100%;text-align:center;margin-top:10px">
+        <a style="margin:10px;" href="/upload/">UPLOAD NEW</a>
+        <a style="margin:10px;" href="/ripper/">REDEFINE POINTS</a>        
+    </div>
+
+    
+
+</html>

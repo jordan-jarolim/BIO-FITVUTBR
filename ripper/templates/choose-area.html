@@ -1,0 +1,140 @@
+<html>
+
+<head>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <title>Rip counter</title>
+  <style>
+        body{
+            background-color:#AAA
+        }
+        h1 {
+            font-size: 2em;
+            font-weight: bold;
+            color: #000;
+            text-align: center;
+            font-family:sans-serif
+        }
+
+        a{
+            font-family: sans-serif;
+            color:#fff
+        }
+
+        h2 {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: red;
+            text-align: center;
+            font-family:sans-serif
+        }
+
+        table {
+            margin: auto;
+        }
+
+        #line {
+            stroke: rgb(255, 0, 0);
+            stroke-width: 2;
+        }
+    </style>
+</head>
+
+<body>
+
+  <h1>
+    Please choose an area to count rips
+  </h1>
+  <div style="width:100%;text-align:center">
+    <svg id="selectRipDirection" style="margin:auto;border:1px solid black" width={{width}} height={{height}}>
+      {% load static %}
+      <image width={{width}} height={{height}} href="{% static name %}" />
+      <rect x=0 y=0 id="firstRect" width=6 height=6 style="display:none;fill:red;" />
+      <rect x=0 y=0 id="secondRect" width=6 height=6 style="display:none;fill:red;" />
+    </svg>
+    <div style="width:100%;text-align:center">
+      <a style="margin:10px;" href="/upload/">UPLOAD NEW</a>
+      <button style="margin:10px" id="reset">RESET</button>
+      <form action="{{ request.build_absolute_uri }}analyze/" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="x1" value="" />
+        <input type="hidden" name="y1" value="" />
+        <input type="hidden" name="x2" value="" />
+        <input type="hidden" name="y2" value="" />
+        <input type="submit" value="ANALYZE" />
+      </form>
+    </div>
+  </div>
+
+</body>
+
+<script type="text/javascript">
+
+  /* some global vars */
+  var first = false;
+  var second = false;
+  var x1 = 0;
+  var y1 = 0;
+  var x2 = 0;
+  var y2 = 0;
+
+  /* helper func to draw line */
+  function createLine(x1, y1, x2, y2) {
+    var newLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    newLine.setAttribute('id', 'line');
+    newLine.setAttribute('x1', x1);
+    newLine.setAttribute('y1', y1);
+    newLine.setAttribute('x2', x2);
+    newLine.setAttribute('y2', y2);
+    $("#line").remove();
+    $('#selectRipDirection').append(newLine);
+  }
+
+  $(document).ready(function () {
+
+    /* reset selection */
+    $("#reset").click(function () {
+      $("#firstRect").css("display", "none");
+      $("#secondRect").css("display", "none");
+      $("#line").remove();
+      first = false;
+      second = false;
+    })
+
+    /* handle clicks + draw line on mousemove */
+    $("#selectRipDirection").click(function (evt) {
+      if (first === false) {
+        first = true;
+        var e = evt.target;
+        var dim = e.getBoundingClientRect();
+        x1 = evt.clientX - ($(this).offset()).left;
+        y1 = evt.clientY - ($(this).offset()).top;
+        $("#firstRect").css("display", "inline");
+        $("#firstRect").attr("x", x1 - 3);
+        $("#firstRect").attr("y", y1 - 3);
+
+        $("input[name='x1']").val(x1)
+        $("input[name='y1']").val(y1)
+
+
+        $("#selectRipDirection").bind("mousemove", function (event) {
+          createLine(x1, y1, event.pageX - ($(this).offset()).left, event.pageY - $(this).offset().top);
+        })
+      }
+      else if (second === false) {
+        $("#selectRipDirection").unbind("mousemove")
+        second = true;
+        var e = evt.target;
+        var dim = e.getBoundingClientRect();
+        x2 = evt.clientX - ($(this).offset()).left;
+        y2 = evt.clientY - ($(this).offset()).top;
+        $("#secondRect").css("display", "inline");
+        $("#secondRect").attr("x", x2 - 3);
+        $("#secondRect").attr("y", y2 - 3);
+
+        $("input[name='x2']").val(x2)
+        $("input[name='y2']").val(y2)
+      }
+    })
+  });
+</script>
+
+</html>

@@ -1,0 +1,54 @@
+<html>
+
+<head>
+  <title>File Upload</title>
+  <style>
+        body{
+            background-color:#AAA
+        }
+        h1 {
+            font-size: 2em;
+            font-weight: bold;
+            color: #000;
+            text-align: center;
+            font-family:sans-serif
+        }
+
+        a{
+            font-family: sans-serif;
+            color:#fff
+        }
+
+        h2 {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: red;
+            text-align: center;
+            font-family:sans-serif
+        }
+
+        table {
+            margin: auto;
+        }
+
+        #line {
+            stroke: rgb(255, 0, 0);
+            stroke-width: 2;
+        }
+    </style>
+</head>
+
+<body>
+  <h1>
+    Please upload your fingerprint here
+  </h1>
+  <div style="width:400px;margin:auto;">
+    <form action="{{ request.build_absolute_uri }}" method="POST" enctype="multipart/form-data">
+      {{ form }}
+      <input type="submit" value="Submit" />
+    </form>
+  </div>
+
+</body>
+
+</html>
